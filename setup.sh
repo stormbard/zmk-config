@@ -51,10 +51,10 @@ if [[ $curl_exists == "true" && $wget_exists == "true" ]]; then
     if [[ $force_wget == "true" ]]; then
         download_command="wget "
     else
-        download_command="curl -O "
+        download_command="curl -fsOL "
     fi
 elif [[ $curl_exists == "true" ]]; then
-    download_command="curl -O "
+    download_command="curl -fsOL "
 elif [[ $wget_exists == "true" ]]; then
     download_command="wget "
 else
@@ -62,77 +62,116 @@ else
     exit 1
 fi
 
-repo_path="https://github.com/zmkfirmware/zmk-config-split-template.git"
+repo_path="https://github.com/zmkfirmware/unified-zmk-config-template.git"
 title="ZMK Config Setup:"
 
-prompt="Pick an MCU board:"
-options=("nice!nano v1" "nice!nano v2" "QMK Proton-C" "BlueMicro840 (v1)" "makerdiary nRF52840 M.2")
-
-echo "$title"
 echo ""
-echo "MCU Board Selection:"
-PS3="$prompt "
+echo "Keyboard Selection:"
+PS3="Pick a keyboard: "
+options=("2% Milk" "A. Dux" "BAT43" "BDN9 Rev2" "BFO-9000" "Boardsource 3x4 Macropad" "Boardsource 5x12" "BT60 V1 Hotswap" "BT60 V1 Soldered" "Chalice" "Clog" "Contra" "Corne" "Cradio/Sweep" "CRBN Featherlight" "eek!" "Elephant42" "Ergodash" "Eternal Keypad" "Eternal Keypad Lefty" "Ferris 0.2" "Fourier Rev. 1" "Helix" "Hummingbird" "Iris" "Jian" "Jiran" "Jorne" "Knob Goblin" "Kyria" "Kyria Rev2" "Leeloo" "Lily58" "Lotus58" "MakerDiary m60" "Microdox" "MurphPad" "Naked60" "Nibble" "nice!60" "nice!view" "nice!view adapter" "Osprette" "Pancake" "Planck Rev6" "QAZ" "Quefrency Rev. 1" "Redox" "REVIUNG41" "Romac Macropad" "Romac+ Macropad" "S40NC" "Sofle" "Splitreus62" "TG4x" "Tidbit Numpad" "Zodiark" )
+keyboards_id=("two_percent_milk" "a_dux" "bat43" "bdn9_rev2" "bfo9000" "boardsource3x4" "boardsource5x12" "bt60_v1_hs" "bt60_v1" "chalice" "clog" "contra" "corne" "cradio" "crbn" "eek" "elephant42" "ergodash" "eternal_keypad" "eternal_keypad_lefty" "ferris_rev02" "fourier" "helix" "hummingbird" "iris" "jian" "jiran" "jorne" "knob_goblin" "kyria" "kyria_rev2" "leeloo" "lily58" "lotus58" "m60" "microdox" "murphpad" "naked60" "nibble" "nice60" "nice_view" "nice_view_adapter" "osprette" "pancake" "planck_rev6" "qaz" "quefrency" "redox" "reviung41" "romac" "romac_plus" "s40nc" "sofle" "splitreus62" "tg4x" "tidbit" "zodiark" )
+keyboards_type=("shield" "shield" "shield" "board" "shield" "shield" "shield" "board" "board" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "board" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "shield" "board" "shield" "shield" "shield" "shield" "board" "shield" "shield" "shield" "shield" "shield" "shield" "board" "shield" "shield" "shield" "shield" "shield" )
+keyboards_arch=("" "" "" "arm" "" "" "" "arm" "arm" "" "" "" "" "" "" "" "" "" "" "" "arm" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "arm" "" "" "" "" "arm" "" "" "" "" "" "" "arm" "" "" "" "" "" )
+keyboards_basedir=("two_percent_milk" "a_dux" "bat43" "bdn9" "bfo9000" "boardsource3x4" "boardsource5x12" "bt60" "bt60" "chalice" "clog" "contra" "corne" "cradio" "crbn" "eek" "elephant42" "ergodash" "eternal_keypad" "eternal_keypad" "ferris" "fourier" "helix" "hummingbird" "iris" "jian" "jiran" "jorne" "knob_goblin" "kyria" "kyria" "leeloo" "lily58" "lotus58" "m60" "microdox" "murphpad" "naked60" "nibble" "nice60" "nice_view" "nice_view_adapter" "osprette" "pancake" "planck" "qaz" "quefrency" "redox" "reviung41" "romac" "romac_plus" "s40nc" "sofle" "splitreus62" "tg4x" "tidbit" "zodiark" )
+keyboards_split=("n" "y" "n" "n" "y" "n" "n" "n" "n" "n" "y" "n" "y" "y" "n" "n" "y" "y" "n" "n" "n" "y" "y" "n" "y" "y" "y" "y" "n" "y" "y" "y" "y" "y" "n" "y" "n" "n" "n" "n" "n" "n" "n" "n" "n" "n" "y" "y" "n" "n" "n" "n" "y" "y" "n" "n" "y" )
+keyboards_shield=("y" "y" "y" "n" "y" "y" "y" "n" "n" "y" "y" "y" "y" "y" "y" "y" "y" "y" "y" "y" "n" "y" "y" "y" "y" "y" "y" "y" "y" "y" "y" "y" "y" "y" "y" "y" "y" "y" "y" "n" "y" "y" "y" "y" "n" "y" "y" "y" "y" "y" "y" "n" "y" "y" "y" "y" "y" )
+
+a_dux_siblings=("a_dux_left" "a_dux_right" )
+bfo9000_siblings=("bfo9000_left" "bfo9000_right" )
+clog_siblings=("clog_left" "clog_right" )
+corne_siblings=("corne_left" "corne_right" )
+cradio_siblings=("cradio_left" "cradio_right" )
+elephant42_siblings=("elephant42_left" "elephant42_right" )
+ergodash_siblings=("ergodash_left" "ergodash_right" )
+fourier_siblings=("fourier_left" "fourier_right" )
+helix_siblings=("helix_left" "helix_right" )
+iris_siblings=("iris_left" "iris_right" )
+jian_siblings=("jian_left" "jian_right" )
+jiran_siblings=("jiran_left" "jiran_right" )
+jorne_siblings=("jorne_left" "jorne_right" )
+kyria_siblings=("kyria_left" "kyria_right" )
+kyria_rev2_siblings=("kyria_rev2_left" "kyria_rev2_right" )
+leeloo_siblings=("leeloo_left" "leeloo_right" )
+lily58_siblings=("lily58_left" "lily58_right" )
+lotus58_siblings=("lotus58_left" "lotus58_right" )
+microdox_siblings=("microdox_left" "microdox_right" )
+quefrency_siblings=("quefrency_left" "quefrency_right" )
+redox_siblings=("redox_left" "redox_right" )
+sofle_siblings=("sofle_left" "sofle_right" )
+splitreus62_siblings=("splitreus62_left" "splitreus62_right" )
+zodiark_siblings=("zodiark_left" "zodiark_right" )
+
 select opt in "${options[@]}" "Quit"; do
-
     case "$REPLY" in
+        ''|*[!0-9]*) echo "Invalid option. Try another one."; continue;;
 
-    1 ) board="nice_nano"; break;;
-    2 ) board="nice_nano_v2"; break;;
-    3 ) board="proton_c"; break;;
-    4 ) board="bluemicro840_v1"; break;;
-    5 ) board="nrf52840_m2"; break;;
-
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit 1;;
-    *) echo "Invalid option. Try another one."; continue;;
+        $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit 1;;
+        *)
+            if [ $REPLY -gt $(( ${#options[@]}+1 )) ] || [ $REPLY -lt 0 ]; then
+                echo "Invalid option. Try another one."
+                continue
+            fi
+            keyboard_index=$(( $REPLY-1 ))
+            keyboard=${keyboards_id[$keyboard_index]}
+            keyboard_arch=${keyboards_arch[$keyboard_index]}
+            keyboard_basedir=${keyboards_basedir[$keyboard_index]}
+            keyboard_title=${options[$keyboard_index]}
+            keyboard_sibling_var=${keyboard}_siblings[@]                                                  
+            keyboard_sibling_first=${keyboard}_siblings[0]
+            if [ -n "${!keyboard_sibling_first}" ]; then
+                keyboard_siblings=${!keyboard_sibling_var}
+            else
+                keyboard_siblings=( "${keyboard}" )
+            fi
+            split=${keyboards_split[$keyboard_index]}
+            keyboard_shield=${keyboards_shield[$keyboard_index]}
+            break
+        ;;
 
     esac
 done
 
-echo ""
-echo "Keyboard Shield Selection:"
+if [ "$keyboard_shield" == "y" ]; then
+    shields=$keyboard_siblings
+    shield=${keyboard}
+    shield_title=${keyboard_title}
 
-prompt="Pick an keyboard:"
-options=("Kyria" "Lily58" "Corne" "Splitreus62" "Sofle" "Iris" "Reviung41" "RoMac" "RoMac+" "makerdiary M60" "Microdox" "TG4X" "QAZ" "NIBBLE" "Jorne" "Jian" "CRBN" "Tidbit" "Eek!" "BFO-9000" "Helix")
+    prompt="Pick an MCU board:"
+    options=("BlueMicro840 v1" "Mikoto 5.20" "nice!nano v1" "nice!nano v2" "nRF52840 M.2 Module" "nRFMicro 1.1 (flipped)" "nRFMicro 1.1/1.2" "nRFMicro 1.3/1.4" "nRFMicro 1.3/1.4 (nRF52833)" "Puchi-BLE V1" "QMK Proton-C" "Seeeduino XIAO" "Seeeduino XIAO BLE" )
+    board_ids=("bluemicro840_v1" "mikoto_520" "nice_nano" "nice_nano_v2" "nrf52840_m2" "nrfmicro_11_flipped" "nrfmicro_11" "nrfmicro_13" "nrfmicro_13_52833" "puchi_ble_v1" "proton_c" "seeeduino_xiao" "seeeduino_xiao_ble" )
+    boards_usb_only=("n" "n" "n" "n" "n" "n" "n" "n" "n" "n" "y" "y" "n" )
 
-PS3="$prompt "
-# TODO: Add support for "Other" and linking to docs on adding custom shields in user config repos.
-# select opt in "${options[@]}" "Other" "Quit"; do
-select opt in "${options[@]}" "Quit"; do
+    echo ""
+    echo "MCU Board Selection:"
+    PS3="$prompt "
+    select opt in "${options[@]}" "Quit"; do
+        case "$REPLY" in
+            ''|*[!0-9]*) echo "Invalid option. Try another one."; continue;;
 
-    case "$REPLY" in
+            $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit 1;;
+            *)
+                if [ $REPLY -gt $(( ${#options[@]}+1 )) ] || [ $REPLY -lt 0 ]; then
+                    echo "Invalid option. Try another one."
+                    continue
+                fi
 
-    1 ) shield_title="Kyria" shield="kyria"; split="y"; break;;
-    2 ) shield_title="Lily58" shield="lily58"; split="y"; break;;
-    3 ) shield_title="Corne" shield="corne"; split="y"; break;;
-    4 ) shield_title="Splitreus62" shield="splitreus62"; split="y"; break;;
-    5 ) shield_title="Sofle" shield="sofle"; split="y"; break;;
-    6 ) shield_title="Iris" shield="iris"; split="y"; break;;
-    7 ) shield_title="Reviung41" shield="reviung41"; split="n"; break;;
-    8 ) shield_title="RoMac" shield="romac"; split="n"; break;;
-    9 ) shield_title="RoMac+" shield="romac_plus"; split="n"; break;;
-    10 ) shield_title="M60" shield="m60"; split="n"; break;;
-    11 ) shield_title="Microdox" shield="microdox"; split="y"; break;;
-    12 ) shield_title="TG4X" shield="tg4x"; split="n"; break;;
-    13 ) shield_title="QAZ" shield="qaz"; split="n"; break;;
-    14 ) shield_title="NIBBLE" shield="nibble"; split="n"; break;;
-    15 ) shield_title="Jorne" shield="jorne"; split="y"; break;;
-    16 ) shield_title="Jian" shield="jian"; split="y"; break;;
-    17 ) shield_title="CRBN" shield="crbn"; split="n"; break;;
-    18 ) shield_title="Tidbit" shield="tidbit"; split="n" break;;
-    19 ) shield_title="Eek!" shield="eek"; split="n" break;;
-    20 ) shield_title="BFO-9000" shield="bfo9000"; split="y"; break;;
-    21 ) shield_title="Helix" shield="helix"; split="y"; break;;
+                if [ -n "${!keyboard_sibling_first}" ] && [ "${boards_usb_only[$board_index]}" = "y" ] ; then
+                    echo "Wired split is not yet supported by ZMK."
+                    exit 1
+                fi
 
-    # Add link to docs on adding your own custom shield in your ZMK config!
-    # $(( ${#options[@]}+1 )) ) echo "Other!"; break;;
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit 1;;
-    *) echo "Invalid option. Try another one.";continue;;
+                board_index=$(( $REPLY-1 ))
+                board=${board_ids[$board_index]}
+                board_title=${options[$board_index]}
+                boards=( "${board}" )
+                break
+            ;;
 
-    esac
-done
-
-if [ "$split" == "n" ]; then
-    repo_path="https://github.com/zmkfirmware/zmk-config-template.git"
+        esac
+    done
+else
+    board=${keyboard}
+    boards=$keyboard_siblings
 fi
 
 read -r -e -p "Copy in the stock keymap for customization? [Yn]: " copy_keymap
@@ -153,8 +192,12 @@ fi
 
 echo ""
 echo "Preparing a user config for:"
-echo "* MCU Board: ${board}"
-echo "* Shield: ${shield}"
+if [ "$keyboard_shield" == "y" ]; then
+    echo "* MCU Board: ${boards}"
+    echo "* Shield(s): ${shields}"
+else
+    echo "* Board(s): ${boards}"
+fi
 
 if [ "$copy_keymap" == "yes" ]; then
     echo "* Copy Keymap?: ✓"
@@ -179,26 +222,37 @@ cd ${repo_name}
 
 pushd config
 
-$download_command "https://raw.githubusercontent.com/zmkfirmware/zmk/main/app/boards/shields/${shield}/${shield}.conf"
+if [ "$keyboard_shield" == "y" ]; then
+    config_file="https://raw.githubusercontent.com/zmkfirmware/zmk/main/app/boards/shields/${keyboard_basedir}/${shield}.conf"
+    
+    keymap_file="https://raw.githubusercontent.com/zmkfirmware/zmk/main/app/boards/shields/${keyboard_basedir}/${shield}.keymap"
+else
+    config_file="https://raw.githubusercontent.com/zmkfirmware/zmk/main/app/boards/${keyboard_arch}/${keyboard_basedir}/${board}.conf"
+    keymap_file="https://raw.githubusercontent.com/zmkfirmware/zmk/main/app/boards/${keyboard_arch}/${keyboard_basedir}/${board}.keymap"
+fi
 
+echo "Downloading config file (${config_file})"
+$download_command "${config_file}" || echo "# Put configuration options here" > "${keyboard}.conf"
 if [ "$copy_keymap" == "yes" ]; then
-    $download_command "https://raw.githubusercontent.com/zmkfirmware/zmk/main/app/boards/shields/${shield}/${shield}.keymap"
+    echo "Downloading keymap file (${keymap_file})"
+    $download_command "${keymap_file}"
 fi
 
 popd
 
-sed -i'.orig' \
-    -e "s/BOARD_NAME/$board/" \
-    -e "s/SHIELD_NAME/$shield/" \
-    -e "s/KEYBOARD_TITLE/$shield_title/" \
-    .github/workflows/build.yml
+echo "include:" >> build.yaml
 
-if [ "$board" == "proton_c" ]; then
-    # Proton-C board still fa
-    sed -i'.orig' -e "s/uf2/hex/g" .github/workflows/build.yml
-fi
-
-rm .github/workflows/*.yml.orig
+for b in ${boards}; do
+    if [ -n "${shields}" ];
+    then
+        for s in ${shields}; do
+            echo "  - board: ${b}" >> build.yaml
+            echo "    shield: ${s}" >> build.yaml
+        done
+    else
+        echo "  - board: ${b}" >> build.yaml
+    fi
+done
 
 rm -rf .git
 git init .
