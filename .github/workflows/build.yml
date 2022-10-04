@@ -3,11 +3,11 @@ on: [push, pull_request, workflow_dispatch]
 name: Build
 
 jobs:
-  lily58:
+  firmware:
     runs-on: ubuntu-latest
     container:
       image: zmkfirmware/zmk-build-arm:stable
-    name: Build Lily 58
+    name: Build ${{ matrix.keyboard }}_${{ matrix.controller }}
     strategy:
       matrix:
         keyboard:
@@ -18,6 +18,13 @@ jobs:
         controller:
           - nice_nano
           - nice_nano_v2
+        screen:
+          - nice_view_adapter nice_view
+        exclude:
+          - keyboard: helix_left
+            controller: nice_nano
+          - keyboard: helix_right
+            controller: nice_nano
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -44,7 +51,7 @@ jobs:
       - name: West Zephyr export
         run: west zephyr-export
       - name: West Build (${{ matrix.keyboard }})
-        run: west build -s zmk/app -b nice_nano -- -DSHIELD=lily58_left -DZMK_CONFIG="${GITHUB_WORKSPACE}/config"
+        run: west build -s zmk/app -b ${{ matrix.controller }} -- -DSHIELD="${{ matrix.keyboard }} ${{ screen }}" -DZMK_CONFIG="${GITHUB_WORKSPACE}/config"
       - name: ${{ matrix.keyboard }} Kconfig file
         run: cat build/zephyr/.config | grep -v "^#" | grep -v "^$"
       - name: Rename zmk.uf2
