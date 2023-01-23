@@ -10,6 +10,12 @@
 #include <dt-bindings/zmk/ext_power.h>
 #include <dt-bindings/zmk/outputs.h>
 
+#define BTS0  BT_SEL 0
+#define BTS1  BT_SEL 1
+#define BTS1  BT_SEL 2
+#define BTS1  BT_SEL 3
+#define EPTOG &ext_power EP_TOG
+
 / {
 	keymap {
 		compatible = "zmk,keymap";
@@ -22,11 +28,11 @@
 // | SHIFT |  Z  |  X  |  C   |  V   |  B   |   "["  |  |  "]"  |  N   |  M    |  ,    |  .   |   /   | ENTER |
 //                     | ALT  | GUI  | LOWER|  SPACE |  | SPACE | RAISE| BSPC  | GUI   |
 			bindings = <
-&kp ESC   &kp N1 &kp N2 &kp N3   &kp N4   &kp N5                      &kp N6 &kp N7   &kp N8    &kp N9  &kp N0   &kp BSLH
-&kp TAB   &kp Q  &kp W  &kp D    &kp F    &kp K                       &kp J  &kp U    &kp R     &kp L   &kp SEMI &kp BSPC
-&kp LCTRL &kp A  &kp S  &kp E    &kp T    &kp G                       &kp Y  &kp N    &kp I     &kp O   &kp H    &kp SQT
-&kp LSHFT &kp Z  &kp X  &kp C    &kp V    &kp B  &kp LBKT   &kp RBKT  &kp P  &kp M    &kp COMMA &kp DOT &kp FSLH &kp RET
-                        &kp LALT &kp LGUI &mo 1  &kp SPACE  &kp SPACE &mo 2  &kp RSHFT &kp RGUI
+&kp ESC    &kp N1  &kp N2  &kp N3    &kp N4    &kp N5                        &kp N6  &kp N7     &kp N8     &kp N9   &kp N0    &kp BSLH
+&kp TAB    &kp Q   &kp W   &kp D     &kp F     &kp K                         &kp J   &kp U      &kp R      &kp L    &kp SEMI  &kp BSPC
+&kp LCTRL  &kp A   &kp S   &kp E     &kp T     &kp G                         &kp Y   &kp N      &kp I      &kp O    &kp H     &kp SQT
+&kp LSHFT  &kp Z   &kp X   &kp C     &kp V     &kp B   &kp LBKT   &kp RBKT   &kp P   &kp M      &kp COMMA  &kp DOT  &kp FSLH  &kp RET
+                           &kp LALT  &kp LGUI  &mo 1   &kp SPACE  &kp SPACE  &mo 2   &kp RSHFT  &kp RGUI
 			>;
 
 			sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
@@ -34,17 +40,17 @@
 
 		lower_layer {
 // ------------------------------------------------------------------------------------------------------------
-// | BTCLR | BT1 | BT2 |  BT3 |  BT4 |  OUTPUT Toggle|          |      |       |       |      |       |       |
+// | BTCLR | BT0 | BT1 |  BT2 |  BT3 |  OUTPUT Toggle|          |      |       |       |      |       |       |
 // |  F1   |  F2 |  F3 |  F4  |  F5  |  F6  |                   |  F7  |  F8   |  F9   |  F10 |  F11  |  F12  |
 // |   `   |  !  |  @  |  #   |  $   |  %   |                   |  ^   |  &    |  *    |  (   |   )   |   ~   |
 // |       |RESET| BLDR|      |      |      |        |  |       |      |  _    |  +    |  {   |   }   |  "|"  |
 //                     |      |      |      |        |  |       |      |       |       |
 			bindings = <
-&bt BT_CLR &bt BT_SEL 0     &bt BT_SEL 1      &bt BT_SEL 2      &bt BT_SEL 3 &out OUT_TOG                    &trans    &trans    &trans          &trans    &trans    &trans
-&kp F1     &kp F2           &kp F3            &kp F4            &kp F5       &kp F6                          &kp F7    &kp F8    &kp F9          &kp F10   &kp F11   &kp F12
-&kp GRAVE  &kp EXCL         &kp AT            &kp HASH          &kp DOLLAR   &kp PRCNT                       &kp CARET &kp AMPS  &kp KP_MULTIPLY &kp LPAR  &kp RPAR  &kp TILDE
-&trans     &reset			&bootloader &ext_power EP_TOG &trans       &trans    &kp EQUAL   &kp MINUS &trans    &kp MINUS &kp KP_PLUS     &kp LBRC  &kp RBRC  &kp PIPE
-                                              &trans            &trans       &trans    &trans      &trans    &trans    &trans    &trans
+&bt BT_CLR  &bt BTS0  &bt BTS1      &bt BTS2  &bt BTS3   &out OUT_TOG                         &trans    &trans     &trans  &trans  &trans  &trans
+&trans      &trans    &trans        &trans    &kp GRAVE  &kp LPAR                             &kp RPAR  &kp TILDE  &trans  &trans  &trans  &trans
+&trans      &trans    &trans        &trans    &kp EQUAL  &kp LBKT                             &kp RBKT  &kp MINUS  &trans  &trans  &trans  &trans
+&trans      &reset    &bootloader   EPTOG     &trans     &trans        &kp EQUAL   &kp MINUS  &trans    &trans     &trans  &trans  &trans  &trans
+                                    &trans    &trans     &trans        &trans      &trans     &trans    &trans     &trans
 			>;
 
 			sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
@@ -58,11 +64,11 @@
 // |   F7  |  F8 |  F9 |  F10 |  F11 |  F12 |        |  |       |  +   |   -   |   =   | BTLDR| RESET |   \   |
 //                     |      |      |      |        |  |       |      |       |       |
 			bindings = <
-&kp GRAVE    &trans &trans &trans  &trans  &trans                      &trans      &trans    &trans    &trans      &trans    &trans
-&kp GRAVE &kp N1 &kp N2 &kp N3  &kp N4  &kp N5                         &kp N6      &kp N7    &kp N8    &kp N9      &kp N0    &kp DEL
-&kp F1    &kp F2 &kp F3 &kp F4  &kp F5  &kp F6                         &trans      &kp LEFT  &kp DOWN  &kp UP      &kp RIGHT &trans
-&trans    &kp F8 &kp F9 &kp F10 &kp F11 &kp F12   &kp PLUS   &kp UNDER &kp KP_PLUS &kp MINUS &kp EQUAL &bootloader &reset  &kp BSLH
-                        &trans  &trans  &trans    &trans     &trans    &trans      &trans    &trans
+&kp GRAVE  &trans  &trans  &trans  &trans  &trans                          &trans       &trans     &trans     &trans       &trans     &trans
+&kp F1     &kp F2  &kp F3  &kp F4  &kp F5  &kp F6                          &trans       &trans     &trans     &trans       &trans     &kp DEL
+&kp F7     &kp F8  &kp F9  &kp F10 &kp F11 &kp F12                         &trans       &kp LEFT   &kp DOWN   &kp UP       &kp RIGHT  &trans
+&trans     &trans  &trans  &trans  &trans  &trans   &kp PLUS    &kp UNDER  &kp KP_PLUS  &kp MINUS  &kp EQUAL  &bootloader  &reset     &trans
+                           &trans  &trans  &trans   &trans      &trans     &trans       &trans     &trans
 			>;
 
 			sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
