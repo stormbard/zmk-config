@@ -12,8 +12,8 @@
 
 #define BTS0  BT_SEL 0
 #define BTS1  BT_SEL 1
-#define BTS1  BT_SEL 2
-#define BTS1  BT_SEL 3
+#define BTS2  BT_SEL 2
+#define BTS3  BT_SEL 3
 #define EPTOG &ext_power EP_TOG
 
 / {
