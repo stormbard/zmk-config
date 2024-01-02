@@ -15,6 +15,7 @@
 #define BTS2  BT_SEL 2
 #define BTS3  BT_SEL 3
 #define EPTOG &ext_power EP_TOG
+#define &reset &sys_reset
 
 / {
 	keymap {
