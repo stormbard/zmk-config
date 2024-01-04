@@ -16,12 +16,11 @@
 #define BTS3  BT_SEL 3
 #define EPTOG &ext_power EP_TOG
 
-enum layer_names {
-	DEFAULT=0,
-	LOWER,
-	RAISE,
-	QWERTY
-}
+// DEFINE LAYER NUMBERS
+#define	DEFAULT 0
+#define	LOWER 1
+#define	RAISE 2
+#define	QWERTY 3
 
 / {
 	keymap {
